@@ -17,13 +17,14 @@ let data = [
 ];
 
 app.get("/", (req, res) => {
-  res.json();
+  res.json(data);
 });
 
 app.post("/", (req, res) => {
-  const { username, comment } = req.body.data;
-  console.log(username, "commentes this -->", comment);
-  res.send("Sent");
+  const newData = req.body.data;
+  console.log(newData.username, "comments this -->", newData.comment);
+  data.push(newData);
+  res.json(newData);
 });
 
 app.listen(port, () => {

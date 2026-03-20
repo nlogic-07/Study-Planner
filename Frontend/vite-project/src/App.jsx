@@ -1,11 +1,23 @@
 import { useState } from "react";
 import axios from "axios";
+import { useEffect } from "react";
 
-import "./App.css";
+// import "./App.css";
 
 function App() {
   const [username, setUsername] = useState("");
   const [comment, setComment] = useState("");
+  const [data, setData] = useState([]);
+
+  //fetching data from backend
+  const fetchData = async () => {
+    const res = await axios.get("http://localhost:8080/");
+    setData(res.data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   let handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,10 +29,11 @@ function App() {
     console.log(response.data);
     setUsername("");
     setComment("");
+    fetchData();
   };
   return (
     <>
-      <h1>HELLO Basic form</h1>
+      <h1 className="text-3xl font-bold text-blue-500"> Basic form</h1>
       <form onSubmit={(e) => handleSubmit(e)}>
         <label></label>
         <input
@@ -42,6 +55,17 @@ function App() {
 
         <button>Submit</button>
       </form>
+
+      <h3>All comments!!</h3>
+
+      {data.map((item, index) => (
+        <div key={index}>
+          <p>
+            {" "}
+            {item.username} ---{item.comment}
+          </p>
+        </div>
+      ))}
     </>
   );
 }
